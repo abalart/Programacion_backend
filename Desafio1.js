@@ -1,13 +1,12 @@
 class ProductManager{
 
     //Constructor
-    product(){
+    constructor(){
         this.product = []
     
     }
 
-    addProduct(title,description,price,thubmail,code,stock){  //Metodo
-
+    addProduct = (id,title,description,price,thubmail,code,stock) => {  //Metodo
 
     const product = {
         id, //Hacer autoincrementable
@@ -19,17 +18,25 @@ class ProductManager{
         stock,
         }
 
-        this.getProduct.push(product)   
+        this.product.push(product)   
     }
 
     //Getter y setters
 
-     getProduct = () => {return product}
+     getProduct = () => {return this.product}
 
-    getProductById = (id) => {
+    getProductById (id) {
           
-        return product.find(produc.id === id)   }
+        return product.find(this.product.id === id)   }
 
 }
 
 
+const gestionador = new ProductManager() //Crep una instancia
+
+gestionador.addProduct(1,"notebook","Una notebook",100,"imagen",99,100)
+
+
+console.log(gestionador.getProduct())
+
+console.log(gestionador.getProductById(1))
