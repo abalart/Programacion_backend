@@ -27,7 +27,7 @@ class ProductManager{
      getProduct = () => {return product}
 
     getProductById = (id) => {
-        
+          
         return product.find(produc.id === id)   }
 
 }
