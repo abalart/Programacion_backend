@@ -22,22 +22,30 @@ class ProductManager{
 
     addProduct = (title,description,price,thubmail,code,stock) => {  //Metodo
     const id = this.getNextID()  //No espera id en el metodo
-
-
 //Validar que no se repita el campo “code” y que todos los campos sean obligatorios
-
-
     const product = {
-        id, //Hacer autoincrementable
+        id, 
         title,
         description,
         price,
         thubmail,
-        code, //Validar que no se repita cuando se cree un producto
+        code, 
         stock,
         }
 
-        this.product.push(product) //Agrego elemento al array
+        if(this.product.some(product => product.code === code) || this.product.title === null || 
+        this.product.description === null || this.product.price === null  || this.product.thubmail === null  ||
+        this.product.title === stock ||  this.product.code === null )
+        {
+            console.log("Datos incorrectos, vuelva a intentar")
+        }
+
+        else
+        {
+             this.product.push(product) //Agrego elemento al array
+
+        }
+       
     }
 
     //Getter y setters
@@ -67,7 +75,10 @@ gestionador.addProduct("notebook","Una notebook",100,"https://fakestoreapi.com/i
 
 gestionador.addProduct("Celular","Motorola 1023",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N002",6)  
 
-gestionador.addProduct("Mouse","Motorola 1023",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74)   
+gestionador.addProduct("Mouse","Genius",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74)  
+
+gestionador.addProduct("Producto con codigo existente","Existente",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74)  
+
 
 console.log(gestionador.getProduct())
 
