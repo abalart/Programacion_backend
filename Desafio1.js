@@ -1,12 +1,31 @@
 class ProductManager{
 
-    //Constructor
+  
+
+    //Constructor, se crea con un array vacio
     constructor(){
         this.product = []
     
     }
 
-    addProduct = (id,title,description,price,thubmail,code,stock) => {  //Metodo
+    getNextID = () => { //metodo
+
+        const count = this.product.length  //cantidad de productos, elementos en el array
+        if (count == 0) return 1 //Si no hay productos, entonces el id es 1
+
+        const lastProduct = this.product[count-1]
+        const lastID = lastProduct.id
+        const nextID = lastID + 1
+        return nextID
+
+    }
+
+    addProduct = (title,description,price,thubmail,code,stock) => {  //Metodo
+    const id = this.getNextID()  //No espera id en el metodo
+
+
+//Validar que no se repita el campo “code” y que todos los campos sean obligatorios
+
 
     const product = {
         id, //Hacer autoincrementable
@@ -18,7 +37,7 @@ class ProductManager{
         stock,
         }
 
-        this.product.push(product)   
+        this.product.push(product) //Agrego elemento al array
     }
 
     //Getter y setters
@@ -26,17 +45,32 @@ class ProductManager{
      getProduct = () => {return this.product}
 
     getProductById (id) {
-          
-        return product.find(this.product.id === id)   }
+    
+    let element = this.product.filter(product => product.id == id)  //Filter devuelve los elementos que coinciden con la busqueda
+    
+    if(element.length === 0) {  
+            console.log("Not found")
+       } 
+       else 
+       {
+             console.log("El elemento buscado es "+JSON.stringify(element))
+             
+       }
+    }
 
 }
 
+const gestionador = new ProductManager() //Creo  una instancia
 
-const gestionador = new ProductManager() //Crep una instancia
 
-gestionador.addProduct(1,"notebook","Una notebook",100,"imagen",99,100)
+gestionador.addProduct("notebook","Una notebook",100,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N001",100) //Agrego un producto al array
 
+gestionador.addProduct("Celular","Motorola 1023",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N002",6)  
+
+gestionador.addProduct("Mouse","Motorola 1023",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74)   
 
 console.log(gestionador.getProduct())
 
-console.log(gestionador.getProductById(1))
+ gestionador.getProductById(1)
+
+ gestionador.getProductById(10) //Not found
