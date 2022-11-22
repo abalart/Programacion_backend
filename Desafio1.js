@@ -77,7 +77,9 @@ gestionador.addProduct("Celular","Motorola 1023",50,"https://fakestoreapi.com/im
 
 gestionador.addProduct("Mouse","Genius",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74)  
 
-gestionador.addProduct("Producto con codigo existente","Existente",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74)  
+gestionador.addProduct("Producto con codigo existente","Existente",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74) 
+
+gestionador.addProduct("Producto con codigo existente",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N005",74) 
 
 
 console.log(gestionador.getProduct())
