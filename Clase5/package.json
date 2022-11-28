@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "moment": "^2.29.4"
+  },
+  "name": "programacion_backend",
+  "version": "1.0.0",
+  "description": "Practicando",
+  "main": "Clase5",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abalart/Programacion_backend.git"
+  },
+  "author": "Me",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abalart/Programacion_backend/issues"
+  },
+  "homepage": "https://github.com/abalart/Programacion_backend#readme"
+}
