@@ -72,18 +72,36 @@ class ProductManager{
 
     //delete product, recibe un id y borra el registro del archivo
 
-    getProductById (id) { //Convertir para que busque por id dentro del archivo
+    getProductById = async (id) =>{ //Convertir para que busque por id dentro del archivo
 
-    let element = this.product.filter(product => product.id == id)  //Filter devuelve los elementos que coinciden con la busqueda
+        const data = await this.getProducts() 
+        const productToFind = data.find(product => product.id === id)
+        return productToFind || console.log(`ERROR: EL PRODUCTO CON EL ID "${id}" NO EXISTE.`);
+    }
+
     
-    if(element.length === 0) {  
-            console.log('Not found')
-       } 
-       else 
-       {
-             console.log('El elemento buscado es '+JSON.stringify(element))
-             
-       }
+    deleteProduct = async (id) => {
+        const data = await this.getProducts()
+        const toBeDeleted = data.find(product => product.id === id)
+
+        if(toBeDeleted){
+            const index = data.indexOf(toBeDeleted)
+            data.splice(index, 1);
+            await fs.promises.writeFile(this.patch, JSON.stringify(data))
+            console.log(`\n\nPRODUCTO ELIMINADO: ID "${id}".`);
+        } else {
+            console.log(`\n\nERROR AL ELIMINAR PRODUCTO: EL PRODUCTO CON EL ID "${id}" NO SE ENCUENTRA EN LA LISTA.`);
+        }
+    }
+
+    updateProduct = async (id) => {
+        const data = await this.getProducts()
+        const toBeUpdated = data.find(product => product.id === id)
+
+        toBeUpdated["title"] = "PRODUCTO ACTUALIZADO"
+        toBeUpdated["stock"] = 999999
+        
+        fs.writeFileSync(this.patch, JSON.stringify(data))
     }
 
 }
@@ -94,9 +112,17 @@ async function run() {
     await gestionador.addProduct('notebook','Una notebook',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N001',100)
     await gestionador.addProduct('Celular','Motorola 1023',50,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N002',6)
     await gestionador.addProduct('TV','Televisor para ver como ganamos, VAMOS MESSIIII!!!!!',500,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N003',6)
+    let oneProduct = await gestionador.getProductById(2)
+    let allProducts = await gestionador.getProducts()
 
-    let res = await gestionador.getProducts()
-    console.log(res);
+    console.log('El contenido del archivo es: ')
+    console.log(allProducts);
+    console.log('El producto buscado es: ')
+    console.log(oneProduct);
+
+     await  gestionador.updateProduct(1)
+     await  gestionador.deleteProduct(2)
+   
 }
 
 
