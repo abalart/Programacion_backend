@@ -5,8 +5,6 @@ const fs = require ('fs') //De ahí en adelante todo el módulo de FileSystem
 
 class ProductManager{
 
-    //La clase debe contar con una variable this.path, el cual se inicializará desde el constructor
-    //y debe recibir la ruta a trabajar desde el momento de generar su instancia.
 
     //Constructor, se crea con un array vacio
     constructor(path,fileName){
@@ -15,23 +13,22 @@ class ProductManager{
         this.filename = fileName
     }
 
-    getNextID = async() => { //metodo
+    getNextID = async() => { //metodo asincronico
  
-        const data = await this.getProducts()
-        const count = data.length
+        const data = await this.getProducts()  //Recibo el contenido del archivo en formato de texto
+        const count = data.length //Cantidad de registros
 
-        if (count == 0) return 1;
+        if (count == 0) return 1; //Si no hay productos  el id es 1
 
-        const lastProduct = data[count - 1]
-        const lastID = lastProduct.id
+        const lastProduct = data[count - 1] //Accedo al ultimo elemento
+        const lastID = lastProduct.id //Obtengo su id
         const nextID = lastID + 1
 
         return nextID
 
     }
 
-//Getter y setters
-    /*Debe tener un método getProducts, el cual debe leer el archivo de productos y devolver todos los productos en formato de arreglo. */
+
 
      getProducts = async() => {
        return  fs.promises.readFile(this.filename,'utf-8')
@@ -44,8 +41,8 @@ class ProductManager{
     
     }
 
-    addProduct = async (title,description,price,thubmail,code,stock) => {  //Metodo
-        const id = await this.getNextID()  
+    addProduct = async (title,description,price,thubmail,code,stock) => {   
+        const id = await this.getNextID()  //Obtengo ultimo id
 
         return this.getProducts()
         .then(products =>{
@@ -55,13 +52,10 @@ class ProductManager{
          .then(newProduct => fs.promises.writeFile(this.filename, JSON.stringify(newProduct)))
     }
      
-    
-
-    
-    //update product, recibe un id y el campo a actualiza o un id y el objeto entero a actualizar
-    updateProduct = async (id) => {
-        const data = await this.getProducts()
-        const toBeUpdated = data.find(product => product.id === id)
+    //Agregar titulo y stock por parametro
+    updateProduct = async (id) => { 
+        const data = await this.getProducts()  //Obtengo array en formato json de productos
+        const toBeUpdated = data.find(product => product.id === id) //Obtengo elemnto que cumple con el id
 
         toBeUpdated["title"] = "PRODUCTO ACTUALIZADO"
         toBeUpdated["stock"] = 150
@@ -70,9 +64,7 @@ class ProductManager{
     }
 
 
-    //delete product, recibe un id y borra el registro del archivo
-
-    getProductById = async (id) =>{ //Convertir para que busque por id dentro del archivo
+    getProductById = async (id) =>{ 
 
         const data = await this.getProducts() 
         const productToFind = data.find(product => product.id === id)
@@ -84,8 +76,8 @@ class ProductManager{
         const data = await this.getProducts()
         const toBeDeleted = data.find(product => product.id === id)
 
-        if(toBeDeleted){
-            const index = data.indexOf(toBeDeleted)
+        if(toBeDeleted){ //Si existe el buscado 
+            const index = data.indexOf(toBeDeleted) //Me quedo con su posicion
             data.splice(index, 1);
             await fs.promises.writeFile(this.patch, JSON.stringify(data))
             console.log(`\n\nPRODUCTO ELIMINADO: ID "${id}".`);
