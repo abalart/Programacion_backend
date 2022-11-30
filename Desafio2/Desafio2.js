@@ -15,15 +15,17 @@ class ProductManager{
         this.filename = fileName
     }
 
-    getNextID = () => { //metodo
+    getNextID = async() => { //metodo
+ 
+        const data = await this.getProducts()
+        const count = data.length
 
-         
-        const count = this.product.length  //cantidad de productos, elementos en el array
-        if (count == 0) return 1 //Si no hay productos, entonces el id es 1
+        if (count == 0) return 1;
 
-        const lastProduct = this.product[count-1]
+        const lastProduct = data[count - 1]
         const lastID = lastProduct.id
         const nextID = lastID + 1
+
         return nextID
 
     }
@@ -43,7 +45,8 @@ class ProductManager{
     }
 
     addProduct = async (title,description,price,thubmail,code,stock) => {  //Metodo
-        const id = getNextID() //Hacer autoincremental
+        const id = await this.getNextID()  
+
         return this.getProducts()
         .then(products =>{
             products.push({id,title,description,price,thubmail,code,stock})
@@ -90,6 +93,8 @@ async function run() {
     const gestionador = new ProductManager('C:\Users\Agustin\Desktop\Carrera_fullstack de CoderHouse\Programacion_backend\Desafio2','desafio.json') //Creo  una instancia
     await gestionador.addProduct('notebook','Una notebook',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N001',100)
     await gestionador.addProduct('Celular','Motorola 1023',50,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N002',6)
+    await gestionador.addProduct('TV','Televisor para ver como ganamos, VAMOS MESSIIII!!!!!',500,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N003',6)
+
     let res = await gestionador.getProducts()
     console.log(res);
 }
