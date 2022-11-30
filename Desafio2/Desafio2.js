@@ -1,6 +1,7 @@
-const requiere = ('fs')
+const fs = require ('fs') //De ahí en adelante todo el módulo de FileSystem 
+//estará contenido en la variable fs. Sólo debemos utilizarlo llamando sus métodos como una clase. Esto podremos hacerlo de 3 formas: síncrono, con callbacks o con promesas.
 
-
+ 
 
 class ProductManager{
 
@@ -8,13 +9,15 @@ class ProductManager{
     //y debe recibir la ruta a trabajar desde el momento de generar su instancia.
 
     //Constructor, se crea con un array vacio
-    constructor(){
-        this.product = []
-        this.patch = 'C:\Users\Agustin\Desktop\Carrera_fullstack de CoderHouse\Programacion_backend\Desafio2'
+    constructor(path,fileName){
+       
+        this.patch = path
+        this.filename = fileName
     }
 
     getNextID = () => { //metodo
 
+         
         const count = this.product.length  //cantidad de productos, elementos en el array
         if (count == 0) return 1 //Si no hay productos, entonces el id es 1
 
@@ -25,70 +28,76 @@ class ProductManager{
 
     }
 
-    addProduct = (title,description,price,thubmail,code,stock) => {  //Metodo
-    const id = this.getNextID()  //No espera id en el metodo
-//Validar que no se repita el campo “code” y que todos los campos sean obligatorios
-    const product = {
-        id, 
-        title,
-        description,
-        price,
-        thubmail,
-        code, 
-        stock,
-        }
+//Getter y setters
+    /*Debe tener un método getProducts, el cual debe leer el archivo de productos y devolver todos los productos en formato de arreglo. */
 
-        if(this.product.some(product => product.code === code) || this.product.title === null || 
-        this.product.description === null || this.product.price === null  || this.product.thubmail === null  ||
-        this.product.title === stock ||  this.product.code === null )
-        {
-            console.log("Datos incorrectos, vuelva a intentar")
-        }
-
-        else
-        {
-             this.product.push(product) //Agrego elemento al array
-
-        }
-       
+     getProducts = async() => {
+       return  fs.promises.readFile(this.filename,'utf-8')
+        .then(content => JSON.parse(content)) //Cuando se resuelve la promesa,convierto json a texto
+     
+        .catch(e => {
+            console.log('ERROR',e)
+              return []
+        })
+    
     }
 
-    //Getter y setters
-
-     getProduct = () => {return this.product}
-
-    getProductById (id) {
+    addProduct = async (title,description,price,thubmail,code,stock) => {  //Metodo
+        const id = getNextID() //Hacer autoincremental
+        return this.getProducts()
+        .then(products =>{
+            products.push({id,title,description,price,thubmail,code,stock})
+               return products
+        })
+         .then(newProduct => fs.promises.writeFile(this.filename, JSON.stringify(newProduct)))
+    }
+     
     
+
+    
+    //update product, recibe un id y el campo a actualiza o un id y el objeto entero a actualizar
+    updateProduct = async (id) => {
+        const data = await this.getProducts()
+        const toBeUpdated = data.find(product => product.id === id)
+
+        toBeUpdated["title"] = "PRODUCTO ACTUALIZADO"
+        toBeUpdated["stock"] = 150
+        
+        fs.writeFileSync(this.fileName, JSON.stringify(data))
+    }
+
+
+    //delete product, recibe un id y borra el registro del archivo
+
+    getProductById (id) { //Convertir para que busque por id dentro del archivo
+
     let element = this.product.filter(product => product.id == id)  //Filter devuelve los elementos que coinciden con la busqueda
     
     if(element.length === 0) {  
-            console.log("Not found")
+            console.log('Not found')
        } 
        else 
        {
-             console.log("El elemento buscado es "+JSON.stringify(element))
+             console.log('El elemento buscado es '+JSON.stringify(element))
              
        }
     }
 
 }
 
-const gestionador = new ProductManager() //Creo  una instancia
+async function run() {
+     
+    const gestionador = new ProductManager('C:\Users\Agustin\Desktop\Carrera_fullstack de CoderHouse\Programacion_backend\Desafio2','desafio.json') //Creo  una instancia
+    await gestionador.addProduct('notebook','Una notebook',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N001',100)
+    await gestionador.addProduct('Celular','Motorola 1023',50,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N002',6)
+    let res = await gestionador.getProducts()
+    console.log(res);
+}
 
 
-gestionador.addProduct("notebook","Una notebook",100,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N001",100) //Agrego un producto al array
-
-gestionador.addProduct("Celular","Motorola 1023",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N002",6)  
-
-gestionador.addProduct("Mouse","Genius",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74)  
-
-gestionador.addProduct("Producto con codigo existente","Existente",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N003",74) 
-
-gestionador.addProduct("Producto con codigo existente",50,"https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg","N005",74) 
+run()
 
 
- console.log(gestionador.getProduct())
 
- gestionador.getProductById(1)
-
- gestionador.getProductById(10) //Not found
+  
+  
