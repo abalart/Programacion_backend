@@ -52,7 +52,7 @@ class ProductManager{
         })
          .then(newProduct => fs.promises.writeFile(this.filename, JSON.stringify(newProduct)))
         }
-
+      
 
     getProductById = async (id) =>{ 
 
