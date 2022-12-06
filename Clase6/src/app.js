@@ -30,19 +30,21 @@ NO INCLUIR LOS node_modules generados.
  
 const app = express()
 
-app.use(express.urlencoded({extended: true}))
+//app.use(express.urlencoded({extended: true}))
 
 const manager = new ProductManager('C:/Users/Agustin/Desktop/Carrera_fullstack de CoderHouse/Programacion_backend/Clase6','productos.json')
 
+
+
 async function run() { //Englobo lo que es asincrono
 
-await manager.addProduct('notebook','Una notebook',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N001',100)
+await manager.addProduct('Mouse','Un Mouse',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N295',100)
 
 prods = await manager.getProducts()
     
 //console.log(prods)
 
-}
+} 
 
 
 run()
@@ -50,13 +52,13 @@ run()
 
 app.get('/products', async (req, res) => {
 const products = await manager.getProducts()  
-  console.log(products)
   res.json(products)
  })
 
-app.get('/add', async (req, res) => {
-const body = req.query
-const obj = await manager.addProduct(body)
+ //http://localhost:8080/add?title=prueba&description=prueba2
+app.get('/add', async (req, res) => {  //Recibe un objeto, lo escribe en el archivo y lo muestra en formato json por pantalla
+  const body = req.query
+  const obj = await manager.addProduct(body)
   res.json(obj)
  })
 

@@ -14,7 +14,7 @@ class ProductManager{
 
     getNextID = async() => { //metodo asincronico
  
-        const data = await this.getProducts()  //Recibo el contenido del archivo en formato de texto
+         const data = await this.getProducts()  //Recibo el contenido del archivo en formato de texto
         const count = data.length //Cantidad de registros
 
         if (count == 0) return 1; //Si no hay productos  el id es 1
@@ -39,25 +39,19 @@ class ProductManager{
         })
     
     }
+       //00:43:54
+    addProduct = async (title,description,price,thubmail,code,stock) => {   
 
-    addProduct = async (obj) => {   
-        const id = await this.getNextID()  //Obtengo ultimo id
-        obj.id = id
-        const list = this.getProducts()
-        list.push(obj)
-        return fs.promises.writeFile(this.filename, JSON.stringify(list))
+         
+         const id = await this.getNextID()  //Obtengo ultimo id
+         console.log('El NextID es: '+id)
+         return this.getProducts()
+        .then(products =>{
+            products.push({id,title,description,price,thubmail,code,stock})
+               return products
+        })
+         .then(newProduct => fs.promises.writeFile(this.filename, JSON.stringify(newProduct)))
         }
-     
-    //Agregar titulo y stock por parametro
-    updateProduct = async (id) => { 
-        const data = await this.getProducts()  //Obtengo array en formato json de productos
-        const toBeUpdated = data.find(product => product.id === id) //Obtengo elemnto que cumple con el id
-
-        toBeUpdated["title"] = "PRODUCTO ACTUALIZADO"
-        toBeUpdated["stock"] = 150
-        
-        fs.writeFileSync(this.fileName, JSON.stringify(data))
-    }
 
 
     getProductById = async (id) =>{ 
