@@ -4,7 +4,7 @@ const ProductManager = require('./product_manager') //importo desafio2
  
 const app = express()
 
-const manager = new ProductManager('C:/Users/Agustin/Desktop/Carrera_fullstack de CoderHouse/Programacion_backend/Clase6','productos.json')
+const manager = new ProductManager(__dirname,'productos.json')
 
 async function run() { //Englobo lo que es asincrono
 
