@@ -15,7 +15,6 @@ prods = await manager.getProducts()
 } 
 
 run()
-
 app.get('/products', async (req, res) => {
 const products = await manager.getProducts()  
 
@@ -30,9 +29,10 @@ const products = await manager.getProducts()
  })
 
  //http://localhost:8080/add?title=prueba&description=prueba2
-app.get('/add', async (req, res) => {  //Recibe un objeto, lo escribe en el archivo y lo muestra en formato json por pantalla
+app.post('/add', async (req, res) => {  //Recibe un objeto, lo escribe en el archivo y lo muestra en formato json por pantalla
   const body = req.query
   const obj = await manager.addProduct(body)
+
   res.json(obj)
  })
 

@@ -39,7 +39,7 @@ class ProductManager{
         })
     
     }
-       //00:43:54
+       
     addProduct = async (title,description,price,thubmail,code,stock) => {   
 
          
