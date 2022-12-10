@@ -4,11 +4,18 @@ const ProductManager = require('./product_manager') //importo desafio2
  
 const app = express()
 
-const manager = new ProductManager(__dirname,'productos.json')
+const fileName = 'productos.json'
+
+const manager = new ProductManager(__dirname,fileName)
 
 async function run() { //Englobo lo que es asincrono
 
 await manager.addProduct('Mouse','Un Mouse',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N295',100)
+
+app.use(express.json())
+app.use(express.urlencoded({urlencoded:true}))
+
+
 
 prods = await manager.getProducts()
 
@@ -30,16 +37,15 @@ const products = await manager.getProducts()
 
  //http://localhost:8080/add?title=prueba&description=prueba2
 app.post('/add', async (req, res) => {  //Recibe un objeto, lo escribe en el archivo y lo muestra en formato json por pantalla
-  const body = req.query
+  const body = req.query   //Con req.query no hay que especificar parametros esperados
   const obj = await manager.addProduct(body)
 
-  res.json(obj)
+  res.json(obj)  //Send a JSON response
+  res.send('Objeto creado') //Send a response
+  return res.status(200).send({Status:'Todo ok'})
  })
 
 app.get('/products/:pid', async (req, res) => {   
-  /* ruta ‘/products/:pid’, la cual debe recibir por req.params el pid (product Id), y devolver sólo
-   el producto solicitado, en lugar de todos los productos. 
-    */
    
    pid = req.params.pid  //Guardo el parametro recibido
    
@@ -49,6 +55,9 @@ app.get('/products/:pid', async (req, res) => {
 
 
  })
+
+
+
 
 
 app.listen(8080,() => console.log('Server is running ...'))
