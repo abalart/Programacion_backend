@@ -1,0 +1,6 @@
+# Ignora la carpeta node_modules
+/node_modules
+*node_modules/*
+node_modules
+Anotaciones backend.docx
+*Anotaciones backend.docx
