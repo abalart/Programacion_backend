@@ -29,13 +29,34 @@ router.post('/', async (req,res)=>{
      
 })
 
+router.put('/:pid', async (req,res)=>{ 
+   
+   const pid = parseInt(req.params.pid)  //Guardo el parametro recibido
+   const productToUpdate = req.body
+   console.log(productToUpdate)
+   console.log('ACTUALIZANDO')
+
+   const products = await manager.getProductById(pid)  
+  
+   if(!product)  return res.status(404).send('Product not found')
+
+   for(const key of Object.keys(productToUpdate)){
+      product[key] = productToUpdate[key] //Piso el registro
+   }
+   await manager.updateProduct(pid,products)
+   
+   res.json({Status: "Producto actualizado",productToUpdate})
+})
+
+
+
 router.get('/products/:pid', async(req, res) => {   
    
    pid = req.params.pid  //Guardo el parametro recibido
    
    const products = await manager.getProducts()  
    const productToFind = products.find(product => product.id == pid)
-   res.json(productToFind)  || console.log(`ERROR: EL PRODUCTO CON EL ID NO EXISTE.`);
+   if(!res.json(productToFind))  return res.status(404).send('Product not found')
 
 
  })
@@ -43,7 +64,7 @@ router.get('/products/:pid', async(req, res) => {
 
 
 
-router.get('/products', async (req, res) => {
+router.get('/', async (req, res) => {
 const products = await manager.getProducts()  
 
   const limit = req.query.limit   //Recibo el parametro limit por query param
