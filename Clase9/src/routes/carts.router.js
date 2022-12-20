@@ -4,7 +4,7 @@ import CartManager from '../cart_manager'
 const router = Router()
 
 
-const cartManager = new CartManager('./cart.json');
+const cartManager = new CartManager('./carrito.json');
 
 router.post('/', async (req, res) => {
     const newCart = await cartManager.addCart()
