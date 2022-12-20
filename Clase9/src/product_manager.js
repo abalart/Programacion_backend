@@ -110,5 +110,5 @@ class ProductManager{
 
 //Exporto mi modulo
 export default ProductManager
-//module.exports = ProductManager  
+ 
   

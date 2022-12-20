@@ -7,7 +7,6 @@ const app = express()
 
 app.use(express.json())
 
-//app.use(express.urlencoded({extended: true}))//codifica  en formato json
 
 app.use(express.static("public"))
 
