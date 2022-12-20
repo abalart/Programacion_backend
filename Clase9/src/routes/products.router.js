@@ -13,6 +13,22 @@ const manager = new ProductManager(__dirname,fileName)
 
 console.log(__dirname) //C:\Users\Agustin\Desktop\Carrera_fullstack de CoderHouse\Programacion_backend\Clase9\src\routes\
 
+
+//Get con limit
+router.get('/products', async (req, res) => {
+const products = await manager.getProducts()  
+
+  const limit = req.query.limit   //Recibo el parametro limit por query param
+
+  if(limit){
+      res.json(products.slice(0,limit)) //Si es informado muestro de 0 a limit
+  }
+  else{
+      res.json(products)
+  }
+ })
+
+//getAll
 router.get('/',async (req,res)=>{ 
     const prods = await manager.getProducts()
     console.log(prods)
@@ -20,7 +36,7 @@ router.get('/',async (req,res)=>{
      
 })
 
-
+//Ad
 router.post('/', async (req,res)=>{ 
    const products = req.body
    const productAdded = await manager.addProduct(products)
@@ -29,6 +45,7 @@ router.post('/', async (req,res)=>{
      
 })
 
+//PutById
 router.put('/:pid', async (req,res)=>{ 
    
    const pid = parseInt(req.params.pid)  //Guardo el parametro recibido
@@ -48,14 +65,18 @@ router.put('/:pid', async (req,res)=>{
    res.json({Status: "Producto actualizado",productToUpdate})
 })
 
+//DeleteById
 router.delete('/:pid', async(req, res) => {   
    
    const pid = parseInt(req.params.pid)  //Guardo el parametro recibido
    const deleteProduct =  await manager.deleteProduct(pid)
-   res.send(deleteProduct)
+   if(deleteProduct)
+   res.send("Producto eliminado")
+   else
+   return res.status(404).send('Product to eliminate not found')
  })
 
-
+//GetById
 router.get('/:pid', async(req, res) => {   
    
    pid = req.params.pid  //Guardo el parametro recibido
@@ -65,19 +86,7 @@ router.get('/:pid', async(req, res) => {
 
  })
 
-//Get con limit
-router.get('/', async (req, res) => {
-const products = await manager.getProducts()  
 
-  const limit = req.query.limit   //Recibo el parametro limit por query param
-
-  if(limit){
-      res.json(products.slice(0,limit)) //Si es informado muestro de 0 a limit
-  }
-  else{
-      res.json(products)
-  }
- })
 
  //Add con query params
 
@@ -91,6 +100,7 @@ const products = await manager.getProducts()
   return res.status(200).send({Status:'Todo ok'})
  })
 
+ 
 router.get('/products/:pid', async (req, res) => {   
    
    pid = req.params.pid  //Guardo el parametro recibido

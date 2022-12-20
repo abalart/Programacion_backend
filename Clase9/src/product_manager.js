@@ -5,7 +5,7 @@ class ProductManager{
 
     //Constructor, se crea con un array vacio
     constructor(path,fileName){
-       
+        this.products = []
         this.patch = path
         this.filename = fileName
     }
@@ -71,6 +71,8 @@ class ProductManager{
 
     
     deleteProduct = async (id) => {
+
+        let flagDelete = true
         const data = await this.getProducts()
         const toBeDeleted = data.find(product => product.id === id)  //Obtengo el id del producto a eliminar
 
@@ -79,8 +81,10 @@ class ProductManager{
             data.splice(index, 1);
             await fs.promises.writeFile(this.filename, JSON.stringify(data))
             console.log(`\n\nPRODUCTO ELIMINADO: ID "${id}".`);
+            return flagDelete
         } else {
             console.log(`\n\nERROR AL ELIMINAR PRODUCTO: EL PRODUCTO CON EL ID "${id}" NO SE ENCUENTRA EN LA LISTA.`);
+            return flagDelete=false
         }
     }
 

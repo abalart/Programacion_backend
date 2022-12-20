@@ -5,7 +5,7 @@ class CartManager{
 
     //Constructor, se crea con un array vacio
     constructor(path,fileName){
-       
+        this.carts = []
         this.patch = path
         this.filename = fileName
     }
@@ -36,17 +36,16 @@ class CartManager{
     
     }
        
-    create = async (title,description,price,thumbnails=[],code,stock,status=true) => {   //crea un carrito
+    create = async (newCart) => {   //crea un carrito
 
-         const list = await this.getProducts()
+         const carts = await this.getProducts()
          const id = await this.getNextID()  //Obtengo ultimo id
-         let obj = {title,description,price,thumbnails,code,stock,status}
-         obj.id = id
-         obj = {id,title,description,price,thumbnails,code,stock,status}
-         console.log('El NextID es: '+id)
+         newCart.id = id
+         newCart.products = (newCart.products)? newCart.producs : []  
+         console.log('El NextID del carrito es: '+id)
 
-        list.push(obj)  //Agrego al archio el objeto ingresado por request
-        await fs.promises.writeFile(this.filename, JSON.stringify(list))
+        carts.push(newCart)  //Agrego al archio el objeto ingresado por request
+        await fs.promises.writeFile(this.filename, JSON.stringify(carts))
 
         }
 
