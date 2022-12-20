@@ -1,6 +1,6 @@
 import fs from 'fs'
  
-class ProductManager{
+class CartManager{
 
 
     //Constructor, se crea con un array vacio
@@ -36,7 +36,7 @@ class ProductManager{
     
     }
        
-    addProduct = async (title,description,price,thumbnails=[],code,stock,status=true) => {   
+    create = async (title,description,price,thumbnails=[],code,stock,status=true) => {   //crea un carrito
 
          const list = await this.getProducts()
          const id = await this.getNextID()  //Obtengo ultimo id
@@ -45,21 +45,10 @@ class ProductManager{
          obj = {id,title,description,price,thumbnails,code,stock,status}
          console.log('El NextID es: '+id)
 
-        //obj.products = (obj.products)? obj.products: []
-        list.push(obj)  //Agrego al array el objeto ingresado por request
+        list.push(obj)  //Agrego al archio el objeto ingresado por request
         await fs.promises.writeFile(this.filename, JSON.stringify(list))
 
-        /*.then(products =>{
-            products.push({id,title,description,price,thumbnails,code,stock,status})
-               return products
-        })
-         .then(newProduct => fs.promises.writeFile(this.filename, JSON.stringify(newProduct)))
-         */
-
-
         }
-
-
 
 
     getProductById = async (id) =>{ 
@@ -72,12 +61,12 @@ class ProductManager{
     
     deleteProduct = async (id) => {
         const data = await this.getProducts()
-        const toBeDeleted = data.find(product => product.id === id)  //Obtengo el id del producto a eliminar
+        const toBeDeleted = data.find(product => product.id === id)
 
         if(toBeDeleted){ //Si existe el buscado 
             const index = data.indexOf(toBeDeleted) //Me quedo con su posicion
             data.splice(index, 1);
-            await fs.promises.writeFile(this.filename, JSON.stringify(data))
+            await fs.promises.writeFile(this.patch, JSON.stringify(data))
             console.log(`\n\nPRODUCTO ELIMINADO: ID "${id}".`);
         } else {
             console.log(`\n\nERROR AL ELIMINAR PRODUCTO: EL PRODUCTO CON EL ID "${id}" NO SE ENCUENTRA EN LA LISTA.`);
@@ -99,12 +88,11 @@ class ProductManager{
         console.log('ACTUALIZANDO')
     }
     
-    
+  
     
 }
 
-
-//Exporto mi modulo
-export default ProductManager
-//module.exports = ProductManager  
+ 
+export default CartManager
+ 
   

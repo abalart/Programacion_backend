@@ -2,9 +2,9 @@
 import {Router} from 'express'
 import ProductManager from '../product_manager.js'
 import * as url from 'url';
-import { ok } from 'assert';
-//const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
+
 
 const router = Router()
 const products=[]
@@ -13,7 +13,7 @@ const manager = new ProductManager(__dirname,fileName)
 
 console.log(__dirname) //C:\Users\Agustin\Desktop\Carrera_fullstack de CoderHouse\Programacion_backend\Clase9\src\routes\
 
-router.get('/',async (req,res)=>{ //Obtener productos en carrito
+router.get('/',async (req,res)=>{ 
     const prods = await manager.getProducts()
     console.log(prods)
     res.json({prods})
@@ -24,8 +24,8 @@ router.get('/',async (req,res)=>{ //Obtener productos en carrito
 router.post('/', async (req,res)=>{ 
    const products = req.body
    const productAdded = await manager.addProduct(products)
-   res.json({productAdded})
-   res.json({status: 'OK', productAdded})
+   res.send({productAdded})
+   res.send({status: 'OK', productAdded})
      
 })
 
@@ -48,22 +48,24 @@ router.put('/:pid', async (req,res)=>{
    res.json({Status: "Producto actualizado",productToUpdate})
 })
 
+router.delete('/:pid', async(req, res) => {   
+   
+   const pid = parseInt(req.params.pid)  //Guardo el parametro recibido
+   const deleteProduct =  await manager.deleteProduct(pid)
+   res.send(deleteProduct)
+ })
 
 
-router.get('/products/:pid', async(req, res) => {   
+router.get('/:pid', async(req, res) => {   
    
    pid = req.params.pid  //Guardo el parametro recibido
-   
    const products = await manager.getProducts()  
    const productToFind = products.find(product => product.id == pid)
    if(!res.json(productToFind))  return res.status(404).send('Product not found')
 
-
  })
 
-
-
-
+//Get con limit
 router.get('/', async (req, res) => {
 const products = await manager.getProducts()  
 
@@ -77,8 +79,10 @@ const products = await manager.getProducts()
   }
  })
 
+ //Add con query params
+
  //http://localhost:8080/add?title=prueba&description=prueba2
-router.post('/add', async (req, res) => {  //Recibe un objeto, lo escribe en el archivo y lo muestra en formato json por pantalla
+ router.post('/add', async (req, res) => {  //Recibe un objeto, lo escribe en el archivo y lo muestra en formato json por pantalla
   const body = req.query   //Con req.query no hay que especificar parametros esperados
   const obj = await manager.addProduct(body)
 
@@ -90,20 +94,18 @@ router.post('/add', async (req, res) => {  //Recibe un objeto, lo escribe en el 
 router.get('/products/:pid', async (req, res) => {   
    
    pid = req.params.pid  //Guardo el parametro recibido
-   
    const products = await manager.getProducts()  
    const productToFind = products.find(product => product.id == pid)
    res.json(productToFind)  || console.log(`ERROR: EL PRODUCTO CON EL ID NO EXISTE.`);
 
  })
 
+
+
  async function run() { //Englobo lo que es asincrono en  esta funcion
 
+//Agrego productos para realizar pruebas
 await manager.addProduct('Mouse','Un Mouse',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N295',100)
-
-let prods = await manager.getProducts()
-
-//console.log(prods)
 
 } 
 
