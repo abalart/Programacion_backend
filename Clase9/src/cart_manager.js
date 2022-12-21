@@ -6,14 +6,19 @@ class CartManager{
     //Constructor, se crea con un array de carrito vacio
     constructor(path){
         this.carts=new Array();
-        this.patch = path
+        this.path = path
         this.format = 'utf-8';
     }
 
     getNextID = async() => {  
  
-        let size = this.carts.length
-        return size > 0 ? this.carts[size-1].id + 1 : 1 
+        const data = await this.getCarts()
+        const count = data.length //Cantidad de registros
+        if (count == 0) return 1; //Si no hay productos  el id es 1
+        const lastCart= data[count - 1] //Accedo al ultimo elemento
+        const lastID = lastCart.id //Obtengo su id
+        const nextID = lastID + 1
+        return nextID
 
     }
 
@@ -31,10 +36,11 @@ class CartManager{
     }
        
     
-     async addCart(){
+      addCart = async() => {
         await this.getCarts()
+        let nextId = await this.getNextID()
         const newCart={
-            id: this.getNextId(),  //El id del carrito
+            id: nextId,  
             products: new Array()  //Nuevo array de productos del mismo
         }
         return (this.carts.push(newCart), await fs.promises.writeFile(this.path, JSON.stringify(this.carts)), newCart)

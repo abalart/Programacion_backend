@@ -4,7 +4,9 @@ import CartManager from '../cart_manager.js'
 const router = Router()
 
 
-const cartManager = new CartManager('./carrito.json');
+
+const fileName = 'carrito.json'
+const cartManager = new CartManager(fileName);
 
 router.post('/', async (req, res) => {
     const newCart = await cartManager.addCart()
@@ -24,8 +26,11 @@ router.get('/', async (req, res) => {
 
 router.post('/:cid/product/:pid', async (req, res) => {
     const cartId = req.params.cid
+    console.log('CARTID '+cartId)
+
     const productId = parseInt(req.params.pid)
-    await cartManager.addProductById(cartId,productId,1)
+    console.log('PRODID '+productId)
+    await cartManager.addProductById(cartId,productId,1)//Siempre incrementa en 1
     const selCart = await cartManager.getCartById(cartId)
     res.send({selCart})
 })

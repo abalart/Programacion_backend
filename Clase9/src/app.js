@@ -8,7 +8,7 @@ const app = express()
 app.use(express.json())
 
 
-app.use(express.static("public"))
+//app.use(express.static("public"))
 
 app.use('/api/products/',product)  //Conecto router y me traigo todos los endpoints, en POSTMAN siempre va a ser /api/products/ + la ruta que se defina en el archivo router
 app.use('/api/cart',cart) //Conecto router y me traigo todos los endpoints
