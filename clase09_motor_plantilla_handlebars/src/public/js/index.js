@@ -1,0 +1,1 @@
+console.log('LOG from front Script');

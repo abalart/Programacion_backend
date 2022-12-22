@@ -9,9 +9,9 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const router = Router()
 const products=[]
 const fileName = 'productos.json'
-const manager = new ProductManager(__dirname,fileName)
+const manager = new ProductManager(fileName)
 
-console.log(__dirname) //C:\Users\Agustin\Desktop\Carrera_fullstack de CoderHouse\Programacion_backend\Clase9\src\routes\
+//console.log(__dirname) //C:\Users\Agustin\Desktop\Carrera_fullstack de CoderHouse\Programacion_backend\Clase9\src\routes\
 
 
 //Get con limit
@@ -36,7 +36,7 @@ router.get('/',async (req,res)=>{
      
 })
 
-//Ad
+//Add
 router.post('/', async (req,res)=>{ 
    const products = req.body
    const productAdded = await manager.addProduct(products)
@@ -55,7 +55,7 @@ router.put('/:pid', async (req,res)=>{
 
    const products = await manager.getProductById(pid)  
   
-   if(!product)  return res.status(404).send('Product not found')
+   if(!products)  return res.status(404).send('Product not found')
 
    for(const key of Object.keys(productToUpdate)){
       product[key] = productToUpdate[key] //Piso el registro
@@ -87,7 +87,7 @@ router.get('/:pid', async(req, res) => {
  })
 
 
-
+/*
  //Add con query params
 
  //http://localhost:8080/add?title=prueba&description=prueba2
@@ -99,7 +99,7 @@ router.get('/:pid', async(req, res) => {
   res.send('Objeto creado') //Send a response
   return res.status(200).send({Status:'Todo ok'})
  })
-
+*/
  
 router.get('/products/:pid', async (req, res) => {   
    
@@ -115,7 +115,7 @@ router.get('/products/:pid', async (req, res) => {
  async function run() { //Englobo lo que es asincrono en  esta funcion
 
 //Agrego productos para realizar pruebas
-await manager.addProduct('Mouse','Un Mouse',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N295',100)
+//await manager.addProduct('Mouse','Un Mouse',100,'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg','N295',100)
 
 } 
 

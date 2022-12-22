@@ -4,10 +4,12 @@ class ProductManager{
 
 
     //Constructor, se crea con un array vacio
-    constructor(path,fileName){
+    constructor(fileName){
+
+
         this.products = []
-        this.patch = path
-        this.filename = fileName
+        this.path = fileName
+         
     }
 
     getNextID = async() => { //metodo asincronico
@@ -26,7 +28,7 @@ class ProductManager{
 
 
      getProducts = async() => {
-       return  fs.promises.readFile(this.filename,'utf-8')
+       return  fs.promises.readFile(this.path,'utf-8')
         .then(content => JSON.parse(content)) //Cuando se resuelve la promesa,convierto json a texto
      
         .catch(e => {
@@ -35,27 +37,28 @@ class ProductManager{
         })
     
     }
+
        
-    addProduct = async (title,description,price,thumbnails=[],code,stock,status=true) => {   
+    addProduct = async (title,description,price,thumbnails=[],code,stock,category,status=true) => {   
 
-         const list = await this.getProducts()
-         const id = await this.getNextID()  //Obtengo ultimo id
-         let obj = {title,description,price,thumbnails,code,stock,status}
-         obj.id = id
-         obj = {id,title,description,price,thumbnails,code,stock,status}
-         console.log('El NextID es: '+id)
+          const list = await this.getProducts() //Obtengo cuantos productos hay para calcular el id
+         const nextId = await this.getNextID()  //Obtengo ultimo id
+         let newProduct = { //Creo nuevo producto en base a lo recibido
+            id:nextId,
+            title:title,
+            description:description,
+            price:price,
+            thumbnails,
+            code:code,
+            stock:stock,
+            category,
+            status
+        
+        }
 
-        //obj.products = (obj.products)? obj.products: []
-        list.push(obj)  //Agrego al array el objeto ingresado por request
-        await fs.promises.writeFile(this.filename, JSON.stringify(list))
-
-        /*.then(products =>{
-            products.push({id,title,description,price,thumbnails,code,stock,status})
-               return products
-        })
-         .then(newProduct => fs.promises.writeFile(this.filename, JSON.stringify(newProduct)))
-         */
-
+       list.push(newProduct)  //Agrego al array el objeto ingresado por request
+       await fs.promises.writeFile(this.path, JSON.stringify(list))
+       return newProduct
 
         }
 
@@ -79,7 +82,7 @@ class ProductManager{
         if(toBeDeleted){ //Si existe el buscado 
             const index = data.indexOf(toBeDeleted) //Me quedo con su posicion
             data.splice(index, 1);
-            await fs.promises.writeFile(this.filename, JSON.stringify(data))
+            await fs.promises.writeFile(this.path, JSON.stringify(data))
             console.log(`\n\nPRODUCTO ELIMINADO: ID "${id}".`);
             return flagDelete
         } else {
@@ -99,7 +102,7 @@ class ProductManager{
             }
     }
         
-        fs.promises.writeFile(this.patch,JSON.stringify(list))
+        fs.promises.writeFile(this.path,JSON.stringify(list))
         console.log('ACTUALIZANDO')
     }
     
