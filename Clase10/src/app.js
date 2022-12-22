@@ -1,26 +1,25 @@
-import express from 'express';
-import {Server} from 'socket.io';
-import __dirname from './utils/index.js'
+import express from 'express'
+import { Server } from 'socket.io'
+import __dirname from './utils/utils.js'
 
-const  app = express();
+const app = express()
 
-const httpServer = app.listen(8080,console.log('listening...'))
+const httpServer = app.listen(8080, () => console.log('Listening...'))
 const socketServer = new Server(httpServer)
 
-app.use(express.static(path.join(__dirname+'/public')))
+app.use(express.static(__dirname + '/public'))
 
-socketServer.on('connection',socket => {
-    console.log('nuevo cliente')
+socketServer.on('connection', socket => { // Handshake
+    console.log('New cliente');
 
-    socket.on('menssage22',data => {
-        console.log('SERVER',data)
+    socket.on('message22', data => {
+        console.log('SERVER: ', data);
+        
+        socket.emit('msg_individual', 'Este mensaje, solo lo recibe el socket')
+        socket.broadcast.emit('msg_resto', 'Este mensae lo recibe todos menos el socket actual')
+        socketServer.emit('msg_all', 'Este mensaje se envia a todos')
 
-        socket.emit('MSJ individual','Éste mensaje lo recibe uno solo')
-        socket.broadcast.emit('msj_resto','Este msj va para todos')
-        socketServer.emit('msj_all','Este mensaje')
     })
+
+
 })
-
-
-
-
