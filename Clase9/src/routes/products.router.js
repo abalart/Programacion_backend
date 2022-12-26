@@ -40,8 +40,11 @@ router.get('/',async (req,res)=>{
 router.post('/', async (req,res)=>{ 
    const products = req.body
    const productAdded = await manager.addProduct(products)
-   res.send({productAdded})
-   res.send({status: 'OK', productAdded})
+   if(productAdded == 0){
+       res.send({status: 'Error,faltan campos obligatorios'})
+   }
+   else{res.send({status: 'OK', productAdded})}
+   
      
 })
 

@@ -39,27 +39,30 @@ class ProductManager{
     }
 
        
-    addProduct = async (title,description,price,thumbnails=[],code,stock,category,status=true) => {   
-
-          const list = await this.getProducts() //Obtengo cuantos productos hay para calcular el id
-         const nextId = await this.getNextID()  //Obtengo ultimo id
-         let newProduct = { //Creo nuevo producto en base a lo recibido
-            id:nextId,
-            title:title,
-            description:description,
-            price:price,
-            thumbnails,
-            code:code,
-            stock:stock,
-            category,
-            status
+    addProduct = async (obj) => { 
         
+          
+          obj.thumbnails=[]
+          if(obj.status==null){
+             obj.status = true 
+          }
+          if(obj.title==null || obj.description==null || obj.price==null || obj.code==null || obj.stock==null || obj.category==null){
+             console.log('ERROR, faltan campos obligatorios') 
+             return 0
+          }
+          else{
+          const list = await this.getProducts() //Obtengo cuantos productos hay para calcular el id
+          const nextId = await this.getNextID()  //Obtengo ultimo id
+          let newProduct = { //Creo nuevo producto en base a lo recibido
+            ...obj,
+            id:nextId,
         }
 
        list.push(newProduct)  //Agrego al array el objeto ingresado por request
        await fs.promises.writeFile(this.path, JSON.stringify(list))
        return newProduct
-
+            }
+          
         }
 
 
