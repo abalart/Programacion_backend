@@ -1,3 +1,18 @@
 <div>
-        <h1>Hola {{name}}</h1>          
+
+{{#each list}}
+<div>
+        <p>{{this.title}}</p>
+        <p><b>{{this.description}}</b></p>
+        <p><b>{{this.price}}</b></p>
+        <p><b>{{this.code}}</b></p>
+        <p><b>{{this.stock}}</b></p>
+        <p><b>{{this.category}}</b></p>
+        <p><b>{{this.status}}</b></p>
+        <p><b>{{this.thumbnails}}</b></p>
+        <hr>
 </div>
+{{/each}}
+</div>
+<script src="/js/index.js"></script>
+
