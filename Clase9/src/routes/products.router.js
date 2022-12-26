@@ -88,21 +88,6 @@ router.get('/:pid', async(req, res) => {
    if(!res.json(productToFind))  return res.status(404).send('Product not found')
 
  })
-
-
-/*
- //Add con query params
-
- //http://localhost:8080/add?title=prueba&description=prueba2
- router.post('/add', async (req, res) => {  //Recibe un objeto, lo escribe en el archivo y lo muestra en formato json por pantalla
-  const body = req.query   //Con req.query no hay que especificar parametros esperados
-  const obj = await manager.addProduct(body)
-
-  res.json(obj)  //Send a JSON response
-  res.send('Objeto creado') //Send a response
-  return res.status(200).send({Status:'Todo ok'})
- })
-*/
  
 router.get('/products/:pid', async (req, res) => {   
    
