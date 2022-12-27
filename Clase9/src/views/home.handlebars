@@ -1,5 +1,6 @@
 <div>
-
+{{#if list}}
+   <div id="products">
 {{#each list}}
 <div>
         <p>{{this.title}}</p>
@@ -13,6 +14,10 @@
         <hr>
 </div>
 {{/each}}
+</div>
+{{else}}
+<h2>No se encontraron productos</h2>
+{{/if}}
 </div>
 <script src="/js/index.js"></script>
 

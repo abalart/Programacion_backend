@@ -7,11 +7,9 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 
 const router = Router()
-const products=[]
 const fileName = 'productos.json'
 const manager = new ProductManager(fileName)
 
-//console.log(__dirname) //C:\Users\Agustin\Desktop\Carrera_fullstack de CoderHouse\Programacion_backend\Clase9\src\routes\
 
 
 //Get con limit
@@ -31,7 +29,6 @@ const products = await manager.getProducts()
 //getAll
 router.get('/',async (req,res)=>{ 
     const prods = await manager.getProducts()
-    console.log(prods)
     res.json({prods})
      
 })

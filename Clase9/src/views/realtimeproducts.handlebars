@@ -1,0 +1,35 @@
+<h1>  ESTO ES REAL TIME</h1>
+<div>
+    {{#each list}}
+    <div>
+        <p>{{this.title}}</p>
+        <p><b>{{this.description}}</b></p>
+        <p><b>{{this.price}}</b></p>
+        <p><b>{{this.code}}</b></p>
+        <p><b>{{this.stock}}</b></p>
+        <p><b>{{this.category}}</b></p>
+        <p><b>{{this.status}}</b></p>
+        <p><b>{{this.thumbnails}}</b></p>
+        <hr>
+    </div>
+    {{/each}}
+</div>
+<form>
+    <p>Agregar producto</p>
+    <input id="title" type="text" placeholder="Title">
+    <input id="description" type="text" placeholder="Description">
+    <input id="code" type="text" placeholder="Code">
+    <input id="price" type="number" placeholder="Price">
+    <input id="stock" type="number" placeholder="Stock">
+    <input id="category" type="text" placeholder="Category">
+    
+    <button id="addBtn" type="submit">Enviar</button>
+</form>
+<form>
+    <p>Eliminar producto</p>
+    <input id="deleteID" type="number" placeholder="ID">
+    <button id="deleteBtn" type="submit">Enviar</button>
+</form>
+
+<script src="/js/index.js"></script>
+<script src="/socket.io/socket.io.js"></script>
