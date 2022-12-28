@@ -10,13 +10,23 @@ const manager = new ProductManager(fileName)
 //Listado de productos
 router.get('/',async (req,res)=>{
    const list = await manager.getProducts()
-  
-    res.render('home',{
-        list
-    })
+    res.render('home',{list})
 })
 
 //realtimeproductst: Get,post,delete
+
+
+
+router.post('/realtimeproducts', async (req, res) => {
+    let products = await manager.getProducts()
+
+    const product = req.body
+    const productAdded = await manager.addProduct(product)
+    products.push(productAdded)
+
+    res.json({ status: "success", productAdded })
+    io.emit('showProducts', products)    
+})
 
 router.get('/realtimeproducts', async (req, res) => {
     let products = await manager.getProducts()
@@ -40,23 +50,14 @@ router.get('/realtimeproducts', async (req, res) => {
     res.render('realTimeProducts', {products})
 })
 
-router.post('/realtimeproducts', async (req, res) => {
-    let products = await manager.getProducts()
 
-    const product = req.body
-    const productAdded = await manager.addProduct(product)
-    products.push(productAdded)
-
-    res.json({ status: "success", productAdded })
-    io.emit('showProducts', products)    
-})
 
 router.delete('/realtimeproducts/:pid', async (req, res) => {
     const pid = req.params.pid
     await manager.deleteProduct(pid)
     const products = await manager.getProducts()
 
-    res.send({status: "success", msg: "Product deleted"})
+    res.re({status: "success", msg: "Product deleted"})
     io.emit('showProducts', products)
 })
 

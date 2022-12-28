@@ -1,5 +1,5 @@
 //En este archivo tenemos el socket del lado del cliente
-
+const socket = io()
 
 //Defino Ids para poder localizarlos como elementos web y definir eventos
 const deleteID = document.getElementById('deleteID')
@@ -24,7 +24,7 @@ addBtn.addEventListener('click', (e) => {
     const stock = prodStock.value.trim()
     const category = prodCategory.value.trim()
     //const status = prodStatus.value.trim()
-    if(title.length > 0 && description.length > 0 && price.length > 0 && code.length > 0 && stock.length > 0 && category.length > 0 && status.length > 0) {
+    if(title.length > 0 && description.length > 0 && price.length > 0 && code.length > 0 && stock.length > 0 && category.length > 0) {
         socket.emit('addProduct', {title, description, code, price, status: true, stock, category, thumbnails: [] })
     }
 })
